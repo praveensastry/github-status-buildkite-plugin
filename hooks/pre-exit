@@ -2,13 +2,11 @@
 
 set -euo pipefail
 
-BUILD_STEP_STATUS="pending"
-
-echo 'Fetching build job status from env vars'
+echo '--- parsing build job status'
 
 if [ ${BUILDKITE_COMMAND_EXIT_STATUS} == 0 ]
 then
-  if [ ${BUILD_SUCCESS} == "true" ]
+  if [ ${BUILDKITE_PLUGIN_GITHUB_STATUS_STATE} == "success" ]
   then
     BUILD_STEP_STATUS="success"
   else
@@ -28,13 +26,13 @@ payload=$(cat <<EOF
 EOF
 )
 
-echo 'Payload for github status'
+echo '--- payload for github status'
 echo ${payload}
 
-echo 'Posting build status...'
+echo '--- posting build status...'
 
 curl -v -u praveensastry:${GIT_ACCESS_TOKEN} https://api.github.com/repos/${GIT_ORG_NAME}/${GIT_REPO_NAME}/statuses/${GIT_REF_SPEC} \
 -H "Content-Type: application/json" \
 -d "$payload"
 
-echo 'Build status posted successfully'
+echo '--- build status posted successfully'
