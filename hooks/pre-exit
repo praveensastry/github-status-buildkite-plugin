@@ -8,7 +8,7 @@ echo 'Fetching build job status from env vars'
 
 if [ ${BUILDKITE_COMMAND_EXIT_STATUS} == 0 ]
 then
-  if [ ${BUILD_SUCCESS} == 0 ]
+  if [ ${BUILD_SUCCESS} == "true" ]
   then
     BUILD_STEP_STATUS="success"
   else
